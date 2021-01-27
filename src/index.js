@@ -46,9 +46,10 @@ const run = async (ws) => {
     });
 
     const page = await browser.newPage();
-    const temp = await page.goto('https://www.tiktok.com/upload/?lang=ru-RU');
-    console.log('temp: ', temp);
-    await browser.close();
+    await page.goto('https://www.tiktok.com/upload/?lang=ru-RU');
+    await page.$('.logo-container');
+    console.log('page loaded');
+    // await browser.close();
   } catch (err) {
     console.log('err: ', err);
   }
