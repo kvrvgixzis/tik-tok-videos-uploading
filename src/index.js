@@ -38,22 +38,20 @@ const startProfile = async () => {
 };
 
 const run = async (ws) => {
-  // try {
-  //Connecting Puppeteer with Mimic instance and performing simple automation.
-  const browser = await puppeteer.connect({
-    browserWSEndpoint: ws,
-    ignoreHTTPSErrors: true,
-    args: ['--ignore-certificate-errors', '--enable-feature=NetworkService'],
-    // defaultViewport: null,
-  });
+  try {
+    //Connecting Puppeteer with Mimic instance and performing simple automation.
+    const browser = await puppeteer.connect({
+      browserWSEndpoint: ws,
+      defaultViewport: null,
+    });
 
-  const page = await browser.newPage();
-  const temp = await page.goto('https://www.tiktok.com/upload/?lang=ru-RU');
-  console.log('temp: ', temp);
-  await browser.close();
-  // } catch (err) {
-  //   console.log('err: ', err);
-  // }
+    const page = await browser.newPage();
+    const temp = await page.goto('https://www.tiktok.com/upload/?lang=ru-RU');
+    console.log('temp: ', temp);
+    await browser.close();
+  } catch (err) {
+    console.log('err: ', err);
+  }
 };
 
 startProfile();
