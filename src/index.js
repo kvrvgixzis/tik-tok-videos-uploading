@@ -2,6 +2,12 @@ const puppeteer = require('puppeteer');
 const axios = require('axios');
 require('dotenv').config();
 
+// TODO: load video
+// TODO: send post
+// TODO: loop in accounts
+// TODO: loop in videos
+// TODO: loop in videos
+
 const TIKTOK_URL = 'https://www.tiktok.com/upload/?lang=ru-RU';
 const { MLA_PORT, PROXY_URL, PROXY_USERNAME, PROXY_PASSWORD } = process.env;
 
