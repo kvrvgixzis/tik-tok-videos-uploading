@@ -3,6 +3,8 @@ const http = require('http');
 
 const TIKTOK_URL = 'https://www.tiktok.com/upload';
 const MLA_PORT = 35000;
+const PROXY_URL =
+  'http://me-pvt-97.airsocks.in/api/v3/changer_channels/channel_1?session=nv1db5d5ehu5gyd7oxq72h2dudj3f7fn';
 
 const startProfile = async () => {
   const profileId = '0ff2b104-351b-4a24-bce8-a50129fd7776';
@@ -36,7 +38,27 @@ const startProfile = async () => {
     });
 };
 
+const reloadProxy = async () => {
+  http
+    .get(PROXY_URL, (resp) => {
+      let data = '';
+
+      resp.on('data', (chunk) => {
+        data += chunk;
+      });
+
+      resp.on('end', async () => {
+        // const answer = await data.text();
+        console.log('data: ', data);
+      });
+    })
+    .on('error', (err) => {
+      console.log(err.message);
+    });
+};
+
 const run = async (ws) => {
+  await reloadProxy();
   try {
     const browser = await puppeteer.connect({
       browserWSEndpoint: ws,
