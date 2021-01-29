@@ -1,11 +1,11 @@
 # Get started
 
-### install dependences
+### 1. install dependences
 ```bash
 npm i
 ```
 
-### create `.env` file
+### 2. create `.env` file
 ```
 MLA_PORT=[PORT]
 PROXY_URL=[URL FOR RELOAD]
@@ -13,18 +13,18 @@ PROXY_USERNAME=[PROXY USER NAME]
 PROXY_PASSWORD=[PROXY PASSWORD]
 ```
 
-### set port in multilogin
+### 3. set port in multilogin
 [instruction](http://docs.multilogin.com/l/en/article/el0fuhynnz-a-quick-guide-to-starting-browser-automation)
 
-### put videos in videos folder
+### 4. put videos in videos folder
 
-### create `videos.json` file
+### 5. create `videos.json` file
 ```json
 {
   "videos": [
     {
       "id": "0",
-      "videoPath": "./videos/id0.mp4",
+      "videoPath": "./videos/**.mp4",
       "head": "***",
       "tags": [
         "#***",
@@ -33,7 +33,7 @@ PROXY_PASSWORD=[PROXY PASSWORD]
     },
     {
       "id": "1",
-      "videoPath": "./videos/id0.mp4",
+      "videoPath": "./videos/**.mp4",
       "head": "***",
       "tags": [
         "#***",
@@ -44,7 +44,7 @@ PROXY_PASSWORD=[PROXY PASSWORD]
  }
 ```
 
-### create `profiles.json` file
+### 6. create `profiles.json` file
 ```json
 {
   "profiles": [
@@ -60,7 +60,7 @@ PROXY_PASSWORD=[PROXY PASSWORD]
  }
 ```
 
-### run bot
+### 7. run bot
 ```bash
 npm start
 ```
