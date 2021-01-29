@@ -6,6 +6,9 @@ const fs = require('fs');
 const TIKTOK_URL = 'https://www.tiktok.com/upload/?lang=ru-RU';
 const { MLA_PORT, PROXY_URL, PROXY_USERNAME, PROXY_PASSWORD } = process.env;
 
+const configRaw = fs.readFileSync('./config.json');
+const { startProfileId, startVideoId } = JSON.parse(configRaw);
+
 const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 
 const runProfile = async (mlId, video) => {
@@ -87,17 +90,23 @@ const uploadVideo = async (page, videoPath) => {
   }
 };
 
-const sendPost = async (page) => {
+const sendPost = async (page, tryCount = 1) => {
   try {
     const sendPostSelector = '.btn-post:not(.disabled)';
     await page.waitForSelector(sendPostSelector);
     console.log('>>> load video success');
+    console.log('>>> try send post: ', tryCount);
     await page.hover(sendPostSelector);
     await page.$eval(sendPostSelector, (btn) => btn.click());
   } catch (error) {
     console.log('error: ', error);
+    if (tryCount === 2) {
+      console.log('>>> skip profile');
+      return;
+    }
     await sleep(1000);
-    await sendPost(page);
+    tryCount += 1;
+    await sendPost(page, tryCount);
   }
 };
 
@@ -146,6 +155,7 @@ const getProfiles = () => {
 const uploadVideoToAllProfiles = async (video) => {
   const profiles = getProfiles();
   for (const profile of profiles) {
+    if (+profile.id < +startProfileId) continue;
     console.log('============================');
     console.log(`>>> run profile ${profile.id}`);
     await runProfile(profile.mlId, video);
@@ -155,6 +165,7 @@ const uploadVideoToAllProfiles = async (video) => {
 const main = async () => {
   const videos = getVideos();
   for (const video of videos) {
+    if (+video.id < +startVideoId) continue;
     console.log('============================');
     console.log(`>>> run video ${video.id}`);
     await uploadVideoToAllProfiles(video);
