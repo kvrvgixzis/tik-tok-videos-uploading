@@ -2,10 +2,7 @@ const puppeteer = require('puppeteer');
 const axios = require('axios');
 require('dotenv').config();
 
-// TODO: load video
-// TODO: send post
 // TODO: loop in accounts
-// TODO: loop in videos
 // TODO: loop in videos
 
 const TIKTOK_URL = 'https://www.tiktok.com/upload/?lang=ru-RU';
@@ -42,33 +39,77 @@ const reloadProxy = async () => {
   }
 };
 
-const typePostName = async (page) => {
+const typeHead = async (page) => {
   try {
-    console.log('>>> try type post name');
+    console.log('>>> try type head');
+    const head = 'Получай бонус по ссылке в описании';
     const nameInputSelector = '.public-DraftEditor-content';
+    await page.waitForSelector(nameInputSelector);
     await page.focus(nameInputSelector);
-    await page.keyboard.type('ITS WORKS! ');
-    console.log('>>> post name success');
+    await page.keyboard.type(`${head} `);
+    console.log('>>> head success');
   } catch (error) {
     console.log('error: ', error);
     await sleep(2000);
-    await typePostName(page);
+    await typeHead(page);
   }
 };
 
 const typeHashTag = async (page) => {
   try {
     console.log('>>> try type hashtag');
+    const hashtags = [
+      '#казино',
+      '#казинох',
+      '#деньги',
+      '#выигрыш',
+      '#удача',
+      '#fy',
+      '#fyp',
+      '#gamble',
+      '#casino',
+    ];
     const nameInputSelector = '.public-DraftEditor-content';
+    await page.waitForSelector(nameInputSelector);
     await page.focus(nameInputSelector);
-    await page.keyboard.type('#hashtag');
-    await sleep(2000);
-    await page.keyboard.down('Enter');
-    console.log('>>> hashtag success');
+    for (const hashtag of hashtags) {
+      await page.keyboard.type(hashtag);
+      await sleep(2500);
+      await page.keyboard.down('Enter');
+      console.log(`>>> hashtag ${hashtag} success`);
+    }
+    console.log(`>>> hashtags success`);
   } catch (error) {
     console.log('error: ', error);
     await sleep(2000);
     await typeHashTag(page);
+  }
+};
+
+const uploadVideo = async (page) => {
+  try {
+    console.log('>>> try load video');
+    const fileInputSelector = '.upload-btn-input';
+    const fileInput = await page.$(fileInputSelector);
+    await fileInput.uploadFile('./videos/id0.mp4');
+    console.log('>>> load video in progress');
+  } catch (error) {
+    console.log('error: ', error);
+    await sleep(1000);
+    await uploadVideo(page);
+  }
+};
+
+const sendPost = async (page) => {
+  try {
+    const sendPostSelector = '.btn-post:not(.disabled)';
+    await page.waitForSelector(sendPostSelector);
+    console.log('>>> load video success');
+    await page.$eval(sendPostSelector, (btn) => btn.click());
+  } catch (error) {
+    console.log('error: ', error);
+    await sleep(1000);
+    await sendPost(page);
   }
 };
 
@@ -90,10 +131,13 @@ const runPuppeteer = async (ws) => {
     console.log('>>> try load page');
     await page.goto(TIKTOK_URL);
     console.log('>>> page loaded');
-    await typePostName(page);
+    await uploadVideo(page);
+    await typeHead(page);
     await typeHashTag(page);
+    await sendPost(page);
+    console.log('>>> post sended');
   } catch (err) {
-    console.log('puppeteer error: ', err);
+    console.log('>>> puppeteer error: ', err);
   }
 };
 
