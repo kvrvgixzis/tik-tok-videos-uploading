@@ -100,7 +100,7 @@ const sendPost = async (page, tryCount = 1) => {
     await page.$eval(sendPostSelector, (btn) => btn.click());
   } catch (error) {
     console.log('error: ', error);
-    if (tryCount === 2) {
+    if (tryCount === 4) {
       console.log('>>> skip profile');
       return;
     }
@@ -160,6 +160,9 @@ const uploadVideoToAllProfiles = async (video) => {
     console.log(`>>> run profile ${profile.id}`);
     await runProfile(profile.mlId, video);
   }
+  const newConfig = { startProfileId: 0, startVideoId };
+  const data = JSON.stringify(newConfig);
+  fs.writeFileSync('config.json', data);
 };
 
 const main = async () => {
