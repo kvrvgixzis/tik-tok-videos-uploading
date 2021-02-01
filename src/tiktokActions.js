@@ -1,3 +1,5 @@
+const { sleep } = require('./utils');
+
 const typeHead = async (page, head) => {
   try {
     console.log('>>> try type head');

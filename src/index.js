@@ -1,5 +1,6 @@
 const puppeteer = require('puppeteer');
 const axios = require('axios');
+const fs = require('fs');
 const {
   typeHead,
   typeHashTag,
@@ -8,15 +9,10 @@ const {
 } = require('./tiktokActions');
 const { reloadProxy } = require('./proxy');
 require('dotenv').config();
-const fs = require('fs');
+const { getConfig, getProfiles, getVideos, sleep } = require('./utils');
 
 const TIKTOK_URL = 'https://www.tiktok.com/upload/?lang=ru-RU';
 const { MLA_PORT, PROXY_USERNAME, PROXY_PASSWORD } = process.env;
-
-const configRaw = fs.readFileSync('./config.json');
-const { startProfileId, startVideoId } = JSON.parse(configRaw);
-
-const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 
 const runProfile = async (mlId, video) => {
   const mlaUrl = `http://127.0.0.1:${MLA_PORT}/api/v1/profile/start?automation=true&puppeteer=true&profileId=${mlId}`;
@@ -24,7 +20,6 @@ const runProfile = async (mlId, video) => {
   try {
     console.log('>>> try start multilogin profile');
     const response = await axios(mlaUrl);
-    console.log('>>> multilogin response: ', response.data);
     if (response.data.status === 'OK') {
       console.log(`>>> browser ws endpoint: ${response.data.value}`);
       await reloadProxy();
@@ -37,15 +32,13 @@ const runProfile = async (mlId, video) => {
 
 const runPuppeteer = async (ws, video) => {
   const { head, tags, videoPath } = video;
-
+  const browser = await puppeteer.connect({
+    browserWSEndpoint: ws,
+    defaultViewport: null,
+    ignoreHTTPSErrors: true,
+    slowMo: 100,
+  });
   try {
-    console.log('>>> start puppeteer');
-    const browser = await puppeteer.connect({
-      browserWSEndpoint: ws,
-      defaultViewport: null,
-      ignoreHTTPSErrors: true,
-      slowMo: 100,
-    });
     const [page] = await browser.pages();
     console.log('>>> login to proxy');
     await page.authenticate({
@@ -64,25 +57,18 @@ const runPuppeteer = async (ws, video) => {
     console.log('>>> post sended');
   } catch (err) {
     console.log('>>> puppeteer error: ', err);
+  } finally {
+    await browser.close();
   }
-};
-
-const getVideos = () => {
-  const videosRaw = fs.readFileSync('./videos.json');
-  return JSON.parse(videosRaw).videos;
-};
-
-const getProfiles = () => {
-  const profilesRaw = fs.readFileSync('./profiles.json');
-  return JSON.parse(profilesRaw).profiles;
 };
 
 const uploadVideoToAllProfiles = async (video) => {
   const profiles = getProfiles();
+  const { startProfileId, startVideoId } = getConfig();
   for (const profile of profiles) {
     if (+profile.id < +startProfileId) continue;
     console.log('============================');
-    console.log(`>>> run profile ${profile.id}`);
+    console.log(`>>> run profile ${profile.id} with video ${video.id}`);
     await runProfile(profile.mlId, video);
   }
   const newConfig = { startProfileId: 0, startVideoId };
@@ -90,17 +76,17 @@ const uploadVideoToAllProfiles = async (video) => {
   fs.writeFileSync('config.json', data);
 };
 
-const main = async () => {
+const uploadAllVideos = async () => {
   const videos = getVideos();
+  const { startVideoId } = getConfig();
   for (const video of videos) {
     if (+video.id < +startVideoId) continue;
-    console.log('============================');
-    console.log(`>>> run video ${video.id}`);
     await uploadVideoToAllProfiles(video);
-    await sleep(15 * 1000 * 60);
-    console.log('>>> await 30 minutes');
+    const sleepTimeout = 15 * 1000 * 60;
+    console.log(`>>> await ${sleepTimeout / 60 / 1000} minutes`);
+    await sleep(sleepTimeout);
   }
-  await main();
+  await uploadAllVideos();
 };
 
-main();
+uploadAllVideos();
