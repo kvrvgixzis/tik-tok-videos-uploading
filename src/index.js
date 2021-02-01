@@ -6,11 +6,12 @@ const {
   uploadVideo,
   sendPost,
 } = require('./tiktokActions');
+const { reloadProxy } = require('./proxy');
 require('dotenv').config();
 const fs = require('fs');
 
 const TIKTOK_URL = 'https://www.tiktok.com/upload/?lang=ru-RU';
-const { MLA_PORT, PROXY_URL, PROXY_USERNAME, PROXY_PASSWORD } = process.env;
+const { MLA_PORT, PROXY_USERNAME, PROXY_PASSWORD } = process.env;
 
 const configRaw = fs.readFileSync('./config.json');
 const { startProfileId, startVideoId } = JSON.parse(configRaw);
@@ -31,17 +32,6 @@ const runProfile = async (mlId, video) => {
     }
   } catch (error) {
     console.log('>>> start multilogin profile error');
-  }
-};
-
-const reloadProxy = async () => {
-  try {
-    console.log('>>> try reload proxy');
-    const response = await axios(PROXY_URL);
-    console.log('>>> proxy response: ', response.data);
-  } catch (error) {
-    console.log('>>> reload proxy error: ', error);
-    await reloadProxy();
   }
 };
 
