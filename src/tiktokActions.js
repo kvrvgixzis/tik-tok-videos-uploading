@@ -18,7 +18,7 @@ const typeHead = async (page, head) => {
 
 const typeHashTag = async (page, tags) => {
   try {
-    console.log('>>> try type hashtag');
+    console.log('>>> try type hashtags');
     const nameInputSelector = '.public-DraftEditor-content';
     await page.waitForSelector(nameInputSelector);
     await page.hover(nameInputSelector);
@@ -27,7 +27,6 @@ const typeHashTag = async (page, tags) => {
       await page.keyboard.type(hashtag);
       await sleep(2500);
       await page.keyboard.down('Enter');
-      console.log(`>>> hashtag ${hashtag} success`);
     }
     console.log(`>>> hashtags success`);
   } catch (error) {
@@ -41,6 +40,7 @@ const uploadVideo = async (page, videoPath) => {
   try {
     console.log('>>> try load video');
     const fileInputSelector = '.upload-btn-input';
+    await page.waitForSelector(fileInputSelector);
     const fileInput = await page.$(fileInputSelector);
     await fileInput.uploadFile(videoPath);
     console.log('>>> load video in progress');
