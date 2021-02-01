@@ -21,46 +21,58 @@ PROXY_PASSWORD=[PROXY PASSWORD]
 ### 5. create `videos.json` file
 ```json
 {
-  "videos": [
-    {
-      "id": "0",
-      "videoPath": "./videos/**.mp4",
-      "head": "***",
-      "tags": [
-        "#***",
-        "#***"
-      ]
-    },
-    {
-      "id": "1",
-      "videoPath": "./videos/**.mp4",
-      "head": "***",
-      "tags": [
-        "#***",
-        "#***"
-      ]
-    }
-   ]
+  "videos": 
+    [
+      {
+        "id": "0",
+        "videoPath": "./videos/**.mp4",
+        "head": "***",
+        "tags": 
+        [
+          "#***",
+          "#***"
+        ]
+      },
+      {
+        "id": "1",
+        "videoPath": "./videos/**.mp4",
+        "head": "***",
+        "tags": 
+        [
+          "#***",
+          "#***"
+        ]
+      }
+    ]
  }
 ```
 
 ### 6. create `profiles.json` file
 ```json
 {
-  "profiles": [
-     {
+  "profiles": 
+    [
+      {
         "id": "0",
         "mlId": "****"
-     },
-     {
+      },
+      {
         "id": "1",
         "mlId": "****"
-     }
+      }
     ]
  }
 ```
 
-### 7. run bot
+### 7. create `config.json` file
+```json
+{
+    "startProfileId": 0,
+    "startVideoId": 0
+}
+```
+
+### 8. run bot
 ```bash
 npm start
 ```
