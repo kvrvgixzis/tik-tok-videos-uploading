@@ -14,7 +14,7 @@ PROXY_PASSWORD=[PROXY PASSWORD]
 ```
 
 ### 3. Set port in multilogin app
-[Instructions](http://docs.multilogin.com/l/ru/article/el0fuhynnz-a-quick-guide-to-starting-browser-automation)
+[Instructions](https://docs.multilogin.com/l/en/article/el0fuhynnz-a-quick-guide-to-starting-browser-automation)
 
 ### 4. Put videos in `videos` folder
 
