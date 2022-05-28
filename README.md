@@ -1,11 +1,11 @@
-# Первый запуск
+# Getting Started
 
-### 1. Установить зависимости
+### 1. Install dependencies
 ```bash
 npm i
 ```
 
-### 2. Создать `.env` файл
+### 2. Create `.env` file
 ```
 MLA_PORT=[PORT]
 PROXY_URL=[URL FOR RELOAD]
@@ -13,12 +13,12 @@ PROXY_USERNAME=[PROXY USER NAME]
 PROXY_PASSWORD=[PROXY PASSWORD]
 ```
 
-### 3. Установить порт в мультилогине
-[Инструкция](http://docs.multilogin.com/l/ru/article/el0fuhynnz-a-quick-guide-to-starting-browser-automation)
+### 3. Set port in multilogin app
+[Instructions](https://docs.multilogin.com/l/en/article/el0fuhynnz-a-quick-guide-to-starting-browser-automation)
 
-### 4. Положить видео в папку `videos`
+### 4. Put videos in `videos` folder
 
-### 5. Создать `videos.json` файл
+### 5. Create `videos.json` file
 ```json
 {
   "videos": 
@@ -47,7 +47,7 @@ PROXY_PASSWORD=[PROXY PASSWORD]
  }
 ```
 
-### 6. Создать `profiles.json` файл
+### 6. Create `profiles.json` file
 ```json
 {
   "profiles": 
@@ -64,7 +64,7 @@ PROXY_PASSWORD=[PROXY PASSWORD]
  }
 ```
 
-### 7. Создать `config.json` файл
+### 7. Create `config.json` file
 ```json
 {
     "startProfileId": 0,
@@ -72,9 +72,9 @@ PROXY_PASSWORD=[PROXY PASSWORD]
 }
 ```
 
-### 8. Запустить мультилогин
+### 8. Run the multilogin
 
-### 9. Запустить бот
+### 9. Launch bot
 ```bash
 npm start
 ```
